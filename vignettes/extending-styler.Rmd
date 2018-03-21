@@ -1,0 +1,32 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This package shows you how you can extend styler by writing a package that 
+exports style guides like the one showcased in this package: The 
+`one_line_style`. styler only implements one style guide (the tidyverse style 
+guide). People who want to distribute their own style guides can follow the 
+instructions in this vignette.
+
+## Organisation
+
+There are various files that should be the same for all third-party style guides.
+
+* R/rules.R contains the rules of the style guide. Alternatively, it can be 
+  split up like styler into `rules-[kind]`, where `kind` is the category
+  the rules belong to (such as `rules-spacesR`, compare styler).
+* R/styler-io.R contains all infrastrucure re-exports from styler.
