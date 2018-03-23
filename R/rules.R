@@ -5,7 +5,7 @@ add_semi_colon <- function(pd) {
   if (is_curly_expr || all(pd$token == "expr")) {
     conditions <- list(
       if (is_curly_expr) which(pd$token != "'}'"),
-      if (is_curly_expr) which(pd$token != "'{'"),
+      if (is_curly_expr) which(styler:::lag(pd$token != "'{'", n = 1)),
       which(pd$lag_newlines > 0L)
     ) %>%
       compact()
