@@ -1,10 +1,17 @@
-#' @importFrom purrr map_dbl
+#' @importFrom purrr map_dbl reduce compact
 #' @importFrom magrittr %>%
 add_semi_colon <- function(pd) {
-  if (is_curly_brace_expr(pd) || all(pd$token == "expr")) {
-    needs_semicolon <- intersect(
-      which(styler:::lag(pd$token == "expr")),
+  is_curly_expr <- is_curly_brace_expr(pd)
+  if (is_curly_expr || all(pd$token == "expr")) {
+    conditions <- list(
+      if (is_curly_expr) which(pd$token != "'}'"),
+      if (is_curly_expr) which(pd$token != "'{'"),
       which(pd$lag_newlines > 0L)
+    ) %>%
+      compact()
+
+    needs_semicolon <- reduce(conditions, intersect,
+      .init = which(styler:::lag(pd$token == "expr"))
     )
     if (length(needs_semicolon) < 1L) return(pd)
     semicolumn_pds <- styler:::create_tokens(
