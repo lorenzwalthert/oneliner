@@ -34,7 +34,7 @@ remove_all_line_breaks <- function(pd) {
 remove_all_spaces <- function(pd) {
   reserved <- pd$token %in% c(
     "IF", "ELSE", "FOR", "WHILE", "IN",
-    "RIGHT_ASSIGN", "LEFT_ASSIGN", "GT", "LT"
+    "GT", "LT"
   )
   pd$spaces[(!reserved) & (!styler:::lead(reserved))] <- 0L
   pd
