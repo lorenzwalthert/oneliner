@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 This package shows you how you can extend styler by writing a package that 
-exports style guides like the one showcased in this package: The 
+exports style guides like the one show-cased in this package: The 
 `one_line_style`. styler only implements one style guide (the tidyverse style 
 guide). People who want to distribute their own style guides can follow the 
 instructions in this vignette.
@@ -28,5 +28,16 @@ There are various files that should be the same for all third-party style guides
 
 * R/rules.R contains the rules of the style guide. Alternatively, it can be 
   split up like styler into `rules-[kind]`, where `kind` is the category
-  the rules belong to (such as `rules-spacesR`, compare styler).
+  the rules belong to (such as `rules-spaces.R`, compare styler).
 * R/styler-io.R contains all infrastrucure re-exports from styler.
+
+
+A package `stylerinfra` (yet to be created) will export infrastructure functions
+from styler such as `create_tokens()`, `lead()`, `lag()` etc. that are now 
+accessed with `:::` in oneliner, which cause R CMD Check notes downstream.
+
+Test cases need to be established for styling. One way to go about that would 
+be to style all of styler source code (or any other package) according to the 
+style guide and check whether R CMD Check still passes. There is no formal 
+mechanisms to conduct such a test as a CI step yet.
+
