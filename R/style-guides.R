@@ -1,3 +1,5 @@
+version <- unname(read.dcf("DESCRIPTION")[, "Version"])
+
 #' Put all code on one line
 #'
 #' This is for real programmers. All code on one line. No comments. I am
@@ -23,6 +25,8 @@ one_line_style <- function() {
     indention         = lst(identity),
     # transformer options
     use_raw_indention = TRUE,
-    reindention       = tidyverse_reindention()
+    reindention       = tidyverse_reindention(),
+    style_guide_name  = "oneliner::one_line_style@https://github.com/lorenzwalthert",
+    style_guide_version = version
   )
 }
