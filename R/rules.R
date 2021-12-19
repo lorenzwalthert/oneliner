@@ -2,7 +2,7 @@
 #' @importFrom magrittr %>%
 add_semi_colon <- function(pd) {
   is_curly_expr <- is_curly_brace_expr(pd)
-  if (is_curly_expr || all(pd$token == "expr")) {
+  if (is_curly_expr || all(pd$token %in% c("expr", "expr_or_assign_or_help"))) {
     conditions <- list(
       if (is_curly_expr) which(pd$token != "'}'"),
       if (is_curly_expr) which(styler:::lag(pd$token != "'{'", n = 1)),
@@ -15,10 +15,11 @@ add_semi_colon <- function(pd) {
     )
     if (length(needs_semicolon) < 1L) return(pd)
     semicolumn_pds <- styler:::create_tokens(
-      "';'", ";",
+      rep("';'", length(needs_semicolon)),
+      rep(";",length(needs_semicolon)),
       pos_ids = map_dbl(needs_semicolon, styler:::create_pos_ids, pd = pd)
     )
-    pd <- styler:::bind_rows(pd, semicolumn_pds) %>%
+    pd <- styler:::bind_rows(pd, semicolumn_pds) %>% # TODO this causes problems
       styler:::arrange(pos_id)
   }
   pd
@@ -26,7 +27,7 @@ add_semi_colon <- function(pd) {
 
 
 remove_all_line_breaks <- function(pd) {
-  pd$lag_newlines <- 0L
+  pd$lag_newlines <- rep(0L, nrow(pd))
   pd
 }
 
@@ -36,7 +37,8 @@ remove_all_spaces <- function(pd) {
     "IF", "ELSE", "FOR", "WHILE", "IN",
     "GT", "LT"
   )
-  pd$spaces[(!reserved) & (!styler:::lead(reserved))] <- 0L
+  to_replace <- (!reserved) & (!styler:::lead(reserved, default = FALSE))
+  pd$spaces[to_replace] <- rep(0L, sum(to_replace))
   pd
 }
 
